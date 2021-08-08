@@ -31,10 +31,14 @@ Plug 'onsails/lspkind-nvim'
 Plug 'glepnir/lspsaga.nvim'
 
 " Useful
+Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'tweekmonster/startuptime.vim'
+Plug 'ThePrimeagen/harpoon'
 
-" devicons
+" Ricing
 Plug 'kyazdani42/nvim-web-devicons'
+Plug 'hoob3rt/lualine.nvim'
+Plug 'ryanoasis/vim-devicons'
 
 " Telescope
 Plug 'nvim-lua/plenary.nvim'
@@ -47,7 +51,7 @@ Plug 'dracula/vim'
 Plug 'folke/tokyonight.nvim'
 Plug 'gruvbox-community/gruvbox'
 
-" jab
+" web
 Plug 'mattn/emmet-vim'
 
 call plug#end()
@@ -64,11 +68,11 @@ if exists('+termguicolors')
 endif
 
 colorscheme tokyonight
-highlight Normal guibg=None
 " }}}
 
 " Lua {{{
 lua require("configs")
+lua require("nvim-treesitter.configs").setup { highlight = { enable = true } }
 " }}}
 
 let mapleader = " "
@@ -94,15 +98,26 @@ nnoremap <leader>pw <cmd>lua require('telescope.builtin').live_grep{}<CR>
 " nnoremap <leader>pc <cmd>lua require('telescope.builtin').current_buffer_fuzzy_find({sorting_strategy="ascending"})<CR>
 " nnoremap <leader>pc <cmd>lua require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_ivy())<CR>
 nnoremap <leader>pc <cmd>lua require("configs.telescope").curr_buff()<CR>
-nnoremap <leader>pb <cmd>:Telescope buffers<CR>
+nnoremap <leader>fb <cmd>:Telescope buffers<CR>
 noremap <leader>ff :Telescop find_files<CR>
+noremap <leader>rc <cmd>lua require('configs.telescope').search_dotfiles()<CR>
 
 "mapping ------------------------
 
 nnoremap <leader><CR> :so %<CR>
 nnoremap <leader>pv   :Vex<CR>
 
+" surround
+vnoremap <leader>' <esc>`>a'<esc>`<i'<esc>
+vnoremap <leader>" <esc>`>a"<esc>`<i"<esc>
+vnoremap <leader>( <esc>`>a)<esc>`<i(<esc>
+vnoremap <leader>[ <esc>`>a]<esc>`<i[<esc>
+vnoremap <leader>{ <esc>`>a}<esc>`<i{<esc>
 
+
+" moving text
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
 " }}}
 
 let g:netrw_banner=0
@@ -116,27 +131,11 @@ fun! TrimWhitespace()
     call winrestview(l:save)
 endfun
 
-fun! JournalMode()
-	execute 'normal gg'
-	let filename = '#' . ' ' . expand('%:r')
-	call setline(1, filename)
-	call setline(2, system('fortune'))
-	execute 'normal o'
-endfun
-
 augroup FRIDAY
     autocmd!
     autocmd BufWritePre * :call TrimWhitespace()
 augroup END
 
-augroup templates
-	autocmd!
-	autocmd BufNewFile *.sh 0r ~/.config/nvim/template/skeleton.sh
-augroup END
-
-augroup journal
-	autocmd VimEnter */log/** 0r ~/.config/nvim/template/journal.md
-	autocmd VimEnter */log/** :call JournalMode()
-	autocmd VimEnter */log/** set complete=k~/Documents/log/**/*
-augroup end
+command! MakeTags !ctags -R .
+autocmd BufWritePost *note-*.md silent !buildNote %:p
 " }}}

@@ -1,4 +1,5 @@
 local action_state = require('telescope.actions.state')
+
 require('telescope').setup{
 	defaults = {
 		prompt_prefix = "~ ",
@@ -21,11 +22,19 @@ require('telescope').load_extension('fzf')
 local mappings = {
 
 }
+
 local builtin = require('telescope.builtin')
 local themes = require('telescope.themes')
+
 mappings.curr_buff = function()
 	local opt = themes.get_ivy()
 	builtin.current_buffer_fuzzy_find(opt)
 end
 
+mappings.search_dotfiles = function()
+	builtin.find_files({
+		promp_title = "< VimRc >",
+		cwd = "~/.config/nvim/",
+	})
+end
 return mappings
