@@ -29,3 +29,4 @@ lspconfig.html.setup { on_attach = on_attach }
 lspconfig.cssls.setup { on_attach = on_attach }
 lspconfig.pylsp.setup { on_attach =  on_attach }
 lspconfig.tsserver.setup {on_attach = on_attach }
+lspconfig.clangd.setup { on_attach = on_attach }
