@@ -1,4 +1,5 @@
 local action_state = require('telescope.actions.state')
+local action = require('telescope.actions')
 
 require('telescope').setup{
 	defaults = {
@@ -9,7 +10,11 @@ require('telescope').setup{
 				["<c-a>"] = function()
 					selected = action_state.get_selected_entry()
 					vim.api.nvim_set_current_dir(selected[1])
-				end
+				end,
+				["<Leader>v"] = action.select_vertical,
+			},
+			n = {
+				["<Leader>v"] = action.select_vertical,
 			}
 		}
 	}
@@ -37,4 +42,5 @@ mappings.search_dotfiles = function()
 		cwd = "~/.config/nvim/",
 	})
 end
+
 return mappings

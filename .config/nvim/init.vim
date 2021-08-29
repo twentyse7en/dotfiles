@@ -21,6 +21,7 @@ set list
 set listchars=tab:▏\ ,trail:𝁢
 set inccommand=split
 set cmdheight=2
+set guifont=Mono:h10
 
 call plug#begin(stdpath("data") . "/plugged")
 
@@ -92,16 +93,20 @@ nnoremap <leader>J <C-W>J
 nnoremap <leader>K <C-W>K
 nnoremap <leader>L <C-W>L
 
+" maximize the current split buffer
+nnoremap <leader><leader> <C-W>\|
+nnoremap <leader>=	<C-W>=
+
 " telescope movements ----
 nnoremap <leader>pw <cmd>lua require('telescope.builtin').live_grep{}<CR>
 " nnoremap <leader>pc :Telescope current_buffer_fuzzy_find sorting_strategy=ascending<CR>
 " nnoremap <leader>pc <cmd>lua require('telescope.builtin').current_buffer_fuzzy_find({sorting_strategy="ascending"})<CR>
 " nnoremap <leader>pc <cmd>lua require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_ivy())<CR>
+nnoremap <Leader>f. <cmd>lua require("telescope.builtin").find_files { cwd = vim.fn.fnamemodify(vim.fn.expand("%"), ":p:h") }<CR>
 nnoremap <leader>pc <cmd>lua require("configs.telescope").curr_buff()<CR>
 nnoremap <leader>fb <cmd>:Telescope buffers<CR>
 noremap <leader>ff :Telescop find_files<CR>
 noremap <leader>rc <cmd>lua require('configs.telescope').search_dotfiles()<CR>
-
 "mapping ------------------------
 
 nnoremap <leader><CR> :so %<CR>
