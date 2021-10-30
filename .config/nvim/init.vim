@@ -1,6 +1,6 @@
-set tabstop=4 softtabstop=4
-set shiftwidth=4
-set smartindent
+" set tabstop=4 softtabstop=4
+" set shiftwidth=4
+" set smartindent
 set relativenumber
 set nu
 set nohlsearch
@@ -23,21 +23,48 @@ set inccommand=split
 set cmdheight=2
 set guifont=Mono:h10
 
+function! s:local_plug(package_name) abort "{{{
+	let package_dir = expand("~/project/nvim/plugins/" . a:package_name)
+	if isdirectory(package_dir)
+		exe "Plug '" . package_dir . "'"
+	endif
+endfunction
+"}}}
+" local plugin
 call plug#begin(stdpath("data") . "/plugged")
+
+" Local plugin
+call s:local_plug('hello.vim')
 
 " Lsp
 Plug 'neovim/nvim-lspconfig'
-Plug 'hrsh7th/nvim-compe'
 Plug 'onsails/lspkind-nvim'
 Plug 'glepnir/lspsaga.nvim'
+
+" Auto completion
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-nvim-lua'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'saadparwaiz1/cmp_luasnip'
+
+" Snippets
+Plug 'L3MON4D3/LuaSnip'
+Plug 'rafamadriz/friendly-snippets'
 
 " Useful
 Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'tweekmonster/startuptime.vim'
 Plug 'ThePrimeagen/harpoon'
+Plug 'lukas-reineke/indent-blankline.nvim'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-commentary'
+Plug 'voldikss/vim-floaterm'
 
 " Ricing
 Plug 'kyazdani42/nvim-web-devicons'
+Plug 'kyazdani42/nvim-tree.lua'
 Plug 'hoob3rt/lualine.nvim'
 Plug 'ryanoasis/vim-devicons'
 
@@ -55,20 +82,26 @@ Plug 'gruvbox-community/gruvbox'
 " web
 Plug 'mattn/emmet-vim'
 
+"navigation
+Plug 'karb94/neoscroll.nvim'
+
+" Indentation
+Plug 'tpope/vim-sleuth'
 call plug#end()
 
 
 " Colorscheme {{{
-let g:tokyonight_style = "storm"
-let g:tokyonight_italic_functions = v:false
-let g:tokyonight_italic_comments = v:true
+" let g:tokyonight_style = "day"
+" let g:tokyonight_italic_functions = v:false
+" let g:tokyonight_italic_comments = v:true
 
 if exists('+termguicolors')
     let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
     let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 endif
 
-colorscheme tokyonight
+colorscheme dracula
+let g:dracula_colorterm = 1
 " }}}
 
 " Lua {{{
@@ -96,7 +129,6 @@ nnoremap <leader>L <C-W>L
 " maximize the current split buffer
 nnoremap <leader><leader> <C-W>\|
 nnoremap <leader>=	<C-W>=
-
 " telescope movements ----
 nnoremap <leader>pw <cmd>lua require('telescope.builtin').live_grep{}<CR>
 " nnoremap <leader>pc :Telescope current_buffer_fuzzy_find sorting_strategy=ascending<CR>
@@ -106,11 +138,13 @@ nnoremap <Leader>f. <cmd>lua require("telescope.builtin").find_files { cwd = vim
 nnoremap <leader>pc <cmd>lua require("configs.telescope").curr_buff()<CR>
 nnoremap <leader>fb <cmd>:Telescope buffers<CR>
 noremap <leader>ff :Telescop find_files<CR>
-noremap <leader>rc <cmd>lua require('configs.telescope').search_dotfiles()<CR>
+noremap <leader>fp <cmd>lua require('configs.telescope').search_dotfiles()<CR>
 "mapping ------------------------
 
 nnoremap <leader><CR> :so %<CR>
-nnoremap <leader>pv   :Vex<CR>
+nnoremap <leader>op   :NvimTreeToggle<CR>
+nnoremap <leader>n :NvimTreeFindFileToggle<CR>
+
 
 " surround
 vnoremap <leader>' <esc>`>a'<esc>`<i'<esc>
@@ -119,16 +153,16 @@ vnoremap <leader>( <esc>`>a)<esc>`<i(<esc>
 vnoremap <leader>[ <esc>`>a]<esc>`<i[<esc>
 vnoremap <leader>{ <esc>`>a}<esc>`<i{<esc>
 
-
 " moving text
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 " }}}
 
-let g:netrw_banner=0
+" let g:netrw_banner=0
 let g:user_emmet_leader_key="<C-Y>"
-
-
+set termguicolors
+highlight NvimTreeFolderIcon guibg=blue
+let g:nvim_tree_highlight_opened_files = 1
 " Augroups {{{
 fun! TrimWhitespace()
     let l:save = winsaveview()

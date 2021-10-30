@@ -1,32 +1,32 @@
 local lspconfig = require('lspconfig')
 local api = vim.api
 
--- Use an on_attach function to only map the following keys
--- after the language server attaches to the current buffer
-local on_attach = function(client, bufnr)
-    --Enable completion triggered by <c-x><c-o>
-    api.nvim_buf_set_option(0, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-    -- Mappings.
-    local opts = { noremap=true, silent=true }
-
-    -- See `:help vim.lsp.*` for documentation on any of the below functions
-    api.nvim_buf_set_keymap(0, 'n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-    api.nvim_buf_set_keymap(0, 'n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
-    api.nvim_buf_set_keymap(0, 'n', 'gK', '<Cmd>Lspsaga hover_doc<CR>', opts)
-    api.nvim_buf_set_keymap(0, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-    api.nvim_buf_set_keymap(0, 'n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-    api.nvim_buf_set_keymap(0, 'n', 'grn', '<cmd>Lspsaga rename<CR>', opts)
-    api.nvim_buf_set_keymap(0, 'n', 'gca', '<cmd>Lspsaga code_action<CR>', opts)
-    api.nvim_buf_set_keymap(0, 'n', 'grr', '<cmd>Telescope lsp_references<CR>', opts)
-    api.nvim_buf_set_keymap(0, 'n', '<leader>sl', '<cmd>Lspsaga show_line_diagnostics<CR>', opts)
-    api.nvim_buf_set_keymap(0, 'n', '<leader>dn', '<cmd>Lspsaga diagnostic_jump_next<CR>', opts)
-    api.nvim_buf_set_keymap(0, 'n', '<leader>dp', '<cmd>Lspsaga diagnostic_jump_prev<CR>', opts)
-
+local function config(_config)
+    return vim.tbl_deep_extend("force", {
+        capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+    }, _config or {})
 end
 
-lspconfig.html.setup { on_attach = on_attach }
-lspconfig.cssls.setup { on_attach = on_attach }
-lspconfig.pylsp.setup { on_attach =  on_attach }
-lspconfig.tsserver.setup {on_attach = on_attach }
-lspconfig.clangd.setup { on_attach = on_attach }
+lspconfig.html.setup(config())
+lspconfig.cssls.setup(config())
+lspconfig.vimls.setup(config())
+lspconfig.jedi_language_server.setup(config())
+lspconfig.tsserver.setup(config())
+lspconfig.clangd.setup(config())
+lspconfig.vuels.setup(config())
+
+local snippets_paths = function()
+    local plugins = { "friendly-snippets" }
+    local paths = {}
+    local path
+    local root_path = vim.fn.stdpath('data') .. '/plugged/'
+    for _, plug in ipairs(plugins) do
+        path = root_path .. plug
+        if vim.fn.isdirectory(path) ~= 0 then
+            table.insert(paths, path)
+        end
+    end
+    return paths
+end
+
+require('luasnip.loaders.from_vscode').lazy_load({ paths = snippets_paths() })
