@@ -1,7 +1,7 @@
 vim.g.floaterm_keymap_toggle = '<Leader>ft'
 vim.g.floaterm_keymap_new = '<Leader>fc'
-vim.g.floaterm_keymap_next = '<Leader>fn'
-vim.g.floaterm_keymap_prev = '<Leader>fp'
+vim.g.floaterm_keymap_next = '<Leader>fk'
+vim.g.floaterm_keymap_prev = '<Leader>fj'
 
 vim.api.nvim_set_keymap('n', '<Space>fl', '<cmd>FloatermNew lazygit<CR>', { noremap = true })
 

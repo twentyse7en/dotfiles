@@ -4,6 +4,9 @@ local action = require('telescope.actions')
 require('telescope').setup{
 	defaults = {
 		prompt_prefix = "~ ",
+		path_display = {
+			smart = 1
+		},
 		mappings = {
 			-- in insert mode
 			i = {
@@ -17,7 +20,7 @@ require('telescope').setup{
 				["<Leader>v"] = action.select_vertical,
 			}
 		}
-	}
+	},
 }
 
 require('telescope').load_extension('fzf')

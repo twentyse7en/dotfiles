@@ -14,6 +14,7 @@ lspconfig.jedi_language_server.setup(config())
 lspconfig.tsserver.setup(config())
 lspconfig.clangd.setup(config())
 lspconfig.vuels.setup(config())
+lspconfig.tailwindcss.setup(config())
 
 local snippets_paths = function()
     local plugins = { "friendly-snippets" }

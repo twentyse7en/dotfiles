@@ -40,6 +40,8 @@ call s:local_plug('hello.vim')
 Plug 'neovim/nvim-lspconfig'
 Plug 'onsails/lspkind-nvim'
 Plug 'glepnir/lspsaga.nvim'
+Plug 'mhartington/formatter.nvim'
+Plug 'mattn/efm-langserver'
 
 " Auto completion
 Plug 'hrsh7th/nvim-cmp'
@@ -59,8 +61,11 @@ Plug 'tweekmonster/startuptime.vim'
 Plug 'ThePrimeagen/harpoon'
 Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'tpope/vim-surround'
-Plug 'tpope/vim-commentary'
+" Plug 'tpope/vim-commentary'
+Plug 'numToStr/Comment.nvim'
 Plug 'voldikss/vim-floaterm'
+" Plug 'justinmk/vim-sneak'
+Plug 'easymotion/vim-easymotion'
 
 " Ricing
 Plug 'kyazdani42/nvim-web-devicons'
@@ -84,24 +89,29 @@ Plug 'mattn/emmet-vim'
 
 "navigation
 Plug 'karb94/neoscroll.nvim'
+Plug 'romgrk/barbar.nvim'
 
 " Indentation
 Plug 'tpope/vim-sleuth'
 call plug#end()
 
+" Misc config {{{
+" sneak settings
+let g:sneak#label = 1
+" }}}
 
 " Colorscheme {{{
-" let g:tokyonight_style = "day"
-" let g:tokyonight_italic_functions = v:false
-" let g:tokyonight_italic_comments = v:true
+let g:tokyonight_style = "night"
+let g:tokyonight_italic_functions = v:false
+let g:tokyonight_italic_comments = v:true
 
 if exists('+termguicolors')
     let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
     let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 endif
 
-colorscheme dracula
-let g:dracula_colorterm = 1
+colorscheme tokyonight
+" let g:dracula_colorterm = 1
 " }}}
 
 " Lua {{{
@@ -139,11 +149,14 @@ nnoremap <leader>pc <cmd>lua require("configs.telescope").curr_buff()<CR>
 nnoremap <leader>fb <cmd>:Telescope buffers<CR>
 noremap <leader>ff :Telescop find_files<CR>
 noremap <leader>fp <cmd>lua require('configs.telescope').search_dotfiles()<CR>
+nnoremap <silent>gr :Lspsaga rename<CR>
 "mapping ------------------------
 
 nnoremap <leader><CR> :so %<CR>
 nnoremap <leader>op   :NvimTreeToggle<CR>
 nnoremap <leader>n :NvimTreeFindFileToggle<CR>
+nnoremap <leader>ll :BufferPick<CR>
+
 
 
 " surround
@@ -156,6 +169,16 @@ vnoremap <leader>{ <esc>`>a}<esc>`<i{<esc>
 " moving text
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
+
+" easymotion
+nmap f <Plug>(easymotion-fl)
+nmap F <Plug>(easymotion-Fl)
+nmap t <Plug>(easymotion-tl)
+nmap T <Plug>(easymotion-Tl)
+nmap <leader>/ <plug>(easymotion-s2)
+
+" format code
+nnoremap <leader><leader>f :Format<CR>
 " }}}
 
 " let g:netrw_banner=0
